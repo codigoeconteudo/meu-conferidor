@@ -14,7 +14,7 @@
   <div class="max-w-4xl mx-auto">
     <div class="rounded-b-3xl overflow-hidden">
       <div id="headerImage" class="h-28 flex items-center justify-center bg-slate-800">
-        <img id="gameLogo" src="assets/logo.png" class="h-16 object-contain" />
+        <img id="gameLogo" src="assets/placeholder.png" class="h-16 object-contain" />
       </div>
       <div class="flex items-center justify-between p-4">
         <h1 class="text-lg font-semibold">Conferidor Loterias CAIXA</h1>
@@ -96,7 +96,14 @@
 
 <script>
 /************** UTIL **************/
-function toast(msg,time=2500){msg){const t=document.createElement('div');t.innerText=msg;t.className='fixed bottom-6 left-1/2 -translate-x-1/2 bg-black text-white px-5 py-3 rounded-2xl shadow-xl z-50';document.body.appendChild(t);setTimeout(()=>t.remove(),time)}
+function toast(msg, time){
+  if(time===undefined) time=2500
+  const t=document.createElement('div')
+  t.innerText=msg
+  t.className='fixed bottom-6 left-1/2 -translate-x-1/2 bg-black text-white px-5 py-3 rounded-2xl shadow-xl z-50'
+  document.body.appendChild(t)
+  setTimeout(function(){ t.remove() }, time)
+}
 
 /************** JOGOS **************/
 const games={
@@ -249,7 +256,9 @@ function checkResults(){
 function finalizeContest(){
   const g=games[currentGame]
   const detailedBets=bets.map(b=>{
-    const hits=b.numbers.filtetoast('📌 Concurso salvo no histórico',2000)    name:b.name,
+    const hits=b.numbers.filter(n=>drawn.includes(n))
+    return {
+      name:b.name,
       numbers:b.numbers,
       hits:hits,
       hitCount:hits.length,
@@ -260,12 +269,12 @@ function finalizeContest(){
   history.push({
     game: g.name,
     contest: contestId,
-    drawn: [...drawn].sort((a,b)=>a-b),
+    drawn: drawn.slice().sort(function(a,b){return a-b}),
     bets: detailedBets,
     date: new Date().toISOString()
   })
   saveHistory()
-  toast('📌 Concurso salvo no histórico')
+  toast('📌 Concurso salvo no histórico',2000)
   goHome()
 }
 
