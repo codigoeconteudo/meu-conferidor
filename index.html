@@ -10,71 +10,85 @@
   </script>
 </head>
 <body class="bg-slate-100 min-h-screen">
-<header class="flex items-center justify-between p-4 bg-slate-900 text-white shadow sticky top-0 z-40">
-  <div class="flex items-center gap-3">
-    <img id="gameLogo" src="assets/placeholder.png" class="w-10 h-10 rounded-xl" />
-    <h1 class="text-lg font-semibold">Conferidor Loterias CAIXA</h1>
+<header class="sticky top-0 z-40 bg-white shadow">
+  <div class="max-w-4xl mx-auto">
+    <div class="rounded-b-3xl overflow-hidden">
+      <div id="headerImage" class="h-28 flex items-center justify-center bg-slate-800">
+        <img id="gameLogo" src="assets/placeholder.png" class="h-16 object-contain" />
+      </div>
+      <div class="flex items-center justify-between p-4">
+        <h1 class="text-lg font-semibold">Conferidor Loterias CAIXA</h1>
+        <button onclick="openHistory()" class="text-sm bg-slate-700 text-white px-3 py-2 rounded-xl">Histórico</button>
+      </div>
+    </div>
   </div>
-  <button onclick="openHistory()" class="text-sm bg-slate-700 px-3 py-2 rounded-xl">Histórico</button>
 </header>
 
 <!-- TELA INICIAL -->
 <section id="screenSelect" class="p-4">
-  <h2 class="text-lg font-bold mb-4">Escolha a modalidade</h2>
-  <div id="gameGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-lg font-bold mb-4">Escolha a modalidade</h2>
+    <div id="gameGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+  </div>
 </section>
 
 <!-- TELA JOGOS -->
 <section id="screenBets" class="hidden p-4 space-y-4">
-  <div>
-    <h2 id="gameTitle" class="text-xl font-bold"></h2>
-    <p id="rule" class="text-sm text-slate-600"></p>
-  </div>
+  <div class="max-w-4xl mx-auto space-y-4">
+    <div>
+      <h2 id="gameTitle" class="text-xl font-bold"></h2>
+      <p id="rule" class="text-sm text-slate-600"></p>
+    </div>
 
-  <input id="contest" class="w-full p-4 rounded-2xl border" placeholder="Número do concurso (ex: 2701)" />
-  <input id="betName" class="w-full p-4 rounded-2xl border" placeholder="Nome do jogo (opcional)" />
+    <input id="contest" class="w-full p-4 rounded-2xl border" placeholder="Número do concurso (ex: 2701)" />
+    <input id="betName" class="w-full p-4 rounded-2xl border" placeholder="Nome do jogo (opcional)" />
 
-  <div id="pickNumbers" class="grid grid-cols-5 sm:grid-cols-8 gap-3"></div>
+    <div id="pickNumbers" class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-3"></div>
 
-  <div class="flex flex-col sm:flex-row gap-3">
-    <button onclick="addBet()" class="flex-1 py-4 rounded-2xl bg-blue-600 text-white font-semibold">Adicionar jogo</button>
-    <button onclick="startDraw()" class="flex-1 py-4 rounded-2xl bg-slate-600 text-white">Conferir sorteio</button>
-    <button onclick="goHome()" class="flex-1 py-4 rounded-2xl bg-slate-400 text-white">Início</button>
-  </div>
+    <div class="flex flex-col sm:flex-row gap-3">
+      <button onclick="addBet()" class="flex-1 py-4 rounded-2xl bg-blue-600 text-white font-semibold">Adicionar jogo</button>
+      <button onclick="startDraw()" class="flex-1 py-4 rounded-2xl bg-slate-600 text-white">Conferir sorteio</button>
+      <button onclick="goHome()" class="flex-1 py-4 rounded-2xl bg-slate-400 text-white">Início</button>
+    </div>
 
-  <div>
-    <h3 class="font-bold mt-6 mb-2">Jogos adicionados</h3>
-    <div id="bets" class="space-y-3"></div>
+    <div>
+      <h3 class="font-bold mt-6 mb-2">Jogos adicionados</h3>
+      <div id="bets" class="space-y-3"></div>
+    </div>
   </div>
 </section>
 
 <!-- TELA SORTEIO -->
 <section id="screenDraw" class="hidden p-4 space-y-4">
-  <h2 class="text-xl font-bold">Sorteio</h2>
-  <div id="drawNumbers" class="grid grid-cols-5 sm:grid-cols-8 gap-3"></div>
+  <div class="max-w-4xl mx-auto space-y-4">
+    <h2 class="text-xl font-bold">Sorteio</h2>
+    <div id="drawNumbers" class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-3"></div>
 
-  <div class="bg-white rounded-3xl p-4 shadow">
-    <h3 class="font-bold mb-2">Números Sorteados</h3>
-    <div id="drawBox" class="flex flex-wrap gap-2"></div>
-  </div>
+    <div class="bg-white rounded-3xl p-4 shadow">
+      <h3 class="font-bold mb-2">Números Sorteados</h3>
+      <div id="drawBox" class="flex flex-wrap gap-2"></div>
+    </div>
 
-  <div class="flex flex-col sm:flex-row gap-3">
-    <button onclick="resetDraw()" class="flex-1 py-4 rounded-2xl bg-orange-500 text-white">Limpar sorteio</button>
-    <button onclick="goHome()" class="flex-1 py-4 rounded-2xl bg-slate-500 text-white">Início</button>
-    <button onclick="finalizeContest()" class="flex-1 py-4 rounded-2xl bg-emerald-600 text-white">Finalizar concurso</button>
-  </div>
+    <div class="flex flex-col sm:flex-row gap-3">
+      <button onclick="resetDraw()" class="flex-1 py-4 rounded-2xl bg-orange-500 text-white">Limpar sorteio</button>
+      <button onclick="goHome()" class="flex-1 py-4 rounded-2xl bg-slate-500 text-white">Início</button>
+      <button onclick="finalizeContest()" class="flex-1 py-4 rounded-2xl bg-emerald-600 text-white">Finalizar concurso</button>
+    </div>
 
-  <div>
-    <h3 class="font-bold mt-6 mb-2">Resultados</h3>
-    <div id="results" class="space-y-3"></div>
+    <div>
+      <h3 class="font-bold mt-6 mb-2">Resultados</h3>
+      <div id="results" class="space-y-3"></div>
+    </div>
   </div>
 </section>
 
 <!-- TELA HISTÓRICO -->
 <section id="screenHistory" class="hidden p-4 space-y-4">
-  <h2 class="text-xl font-bold">📜 Histórico de Concursos</h2>
-  <div id="historyList" class="space-y-3"></div>
-  <button onclick="goHome()" class="w-full py-4 rounded-2xl bg-slate-600 text-white">Voltar</button>
+  <div class="max-w-4xl mx-auto space-y-4">
+    <h2 class="text-xl font-bold">📜 Histórico de Concursos</h2>
+    <div id="historyList" class="space-y-3"></div>
+    <button onclick="goHome()" class="w-full py-4 rounded-2xl bg-slate-600 text-white">Voltar</button>
+  </div>
 </section>
 
 <script>
@@ -103,7 +117,16 @@ const grid=document.getElementById('gameGrid')
 Object.entries(games).forEach(([k,g])=>{
   const c=document.createElement('div')
   c.className='bg-white rounded-3xl p-4 shadow-md cursor-pointer transition transform hover:-translate-y-1 hover:shadow-xl'
-  c.innerHTML=`<div class="flex items-center gap-3"><img src="${g.logo}" class="w-12 h-12 rounded-xl"><div><h3 class="font-bold">${g.name}</h3><p class="text-xs text-slate-500">Escolha ${g.pickMin} a ${g.pickMax}</p></div></div>`
+  c.innerHTML=`
+  <div class="rounded-2xl overflow-hidden shadow">
+    <div class="h-24 flex items-center justify-center ${g.color}">
+      <img src="${g.logo}" class="h-14 object-contain" />
+    </div>
+    <div class="p-4 text-center">
+      <h3 class="font-bold">${g.name}</h3>
+      <p class="text-xs text-slate-500 mt-1">Escolha ${g.pickMin} a ${g.pickMax}</p>
+    </div>
+  </div>`
   c.onclick=()=>selectGame(k)
   grid.appendChild(c)
 })
