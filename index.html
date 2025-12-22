@@ -1,208 +1,224 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Conferidor Loterias CAIXA</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <meta charset="UTF-8">
+  <title>Conferidor Loterias Caixa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            mega:'#1b9a5a',
-            lotofacil:'#930089',
-            quina:'#0057b7',
-            lotomania:'#f58220',
-            duplasena:'#b51c2c',
-            timemania:'#00a859',
-            diadesorte:'#fdb913',
-            super7:'#e31e24'
-          }
-        }
-      }
-    }
-  </script>
-
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
+<body class="bg-gray-100 text-gray-900">
 
-<body class="bg-slate-100 min-h-screen">
+<div class="max-w-6xl mx-auto p-4">
+  <h1 class="text-2xl font-bold mb-6">🎰 Conferidor Loterias Caixa</h1>
 
-<header class="bg-white shadow sticky top-0 z-40">
-  <div class="max-w-4xl mx-auto p-4 flex justify-between items-center">
-    <h1 class="font-semibold">Conferidor Loterias CAIXA</h1>
-    <button onclick="openHistory()" class="bg-slate-700 text-white px-4 py-2 rounded-xl flex items-center gap-1">
-      <span class="material-icons text-sm">history</span>
-      Histórico
-    </button>
+  <!-- HOME -->
+  <div id="home">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="gameCards"></div>
   </div>
-</header>
 
-<section id="screenSelect" class="p-4">
-  <div class="max-w-5xl mx-auto">
-    <h2 class="font-bold mb-4">Escolha a modalidade</h2>
-    <div id="gameGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+  <!-- APOSTAS -->
+  <div id="bets" class="hidden">
+    <button onclick="goHome()" class="mb-4 text-blue-600">← Voltar</button>
+    <h2 id="betsTitle" class="text-xl font-semibold mb-2"></h2>
+
+    <input id="betName" class="border p-2 w-full mb-2" placeholder="Nome do jogo (opcional)">
+    <div id="betRule" class="text-sm mb-2 text-gray-600"></div>
+    <div id="betNumbers" class="grid grid-cols-6 sm:grid-cols-8 gap-2 mb-4"></div>
+
+    <button onclick="saveBet()" class="bg-green-600 text-white px-4 py-2 rounded">Salvar jogo</button>
+    <div id="betList" class="mt-4"></div>
+
+    <button onclick="goDraw()" class="mt-6 bg-blue-600 text-white px-4 py-2 rounded">Ir para sorteio</button>
   </div>
-</section>
 
-<section id="screenBets" class="hidden p-4 space-y-4">
-  <div class="max-w-4xl mx-auto space-y-4">
-    <h2 id="gameTitle" class="font-bold text-xl"></h2>
-    <p id="rule" class="text-sm text-slate-600"></p>
+  <!-- SORTEIO -->
+  <div id="draw" class="hidden">
+    <button onclick="goHome()" class="mb-4 text-blue-600">← Início</button>
+    <h2 class="text-xl font-semibold mb-2">Sorteio</h2>
 
-    <input id="contest" class="w-full p-3 border rounded-xl" placeholder="Número do concurso">
-    <input id="betName" class="w-full p-3 border rounded-xl" placeholder="Nome do jogo">
+    <div id="drawRule" class="text-sm mb-2 text-gray-600"></div>
+    <div id="drawNumbers" class="grid grid-cols-6 sm:grid-cols-8 gap-2 mb-4"></div>
 
-    <div id="pickNumbers" class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-3"></div>
+    <div class="mb-2 font-semibold">Números sorteados:</div>
+    <div id="drawnList" class="flex flex-wrap gap-2 mb-4"></div>
 
-    <div class="flex gap-2">
-      <button onclick="addBet()" class="flex-1 bg-blue-600 text-white py-3 rounded-xl">Adicionar</button>
-      <button onclick="startDraw()" class="flex-1 bg-slate-600 text-white py-3 rounded-xl">Conferir</button>
-      <button onclick="goHome()" class="flex-1 bg-slate-400 text-white py-3 rounded-xl">Início</button>
-    </div>
-
-    <div id="bets"></div>
+    <button onclick="finishDraw()" class="bg-purple-600 text-white px-4 py-2 rounded">Finalizar sorteio</button>
+    <div id="results" class="mt-4"></div>
   </div>
-</section>
-
-<section id="screenDraw" class="hidden p-4">
-  <div class="max-w-4xl mx-auto space-y-4">
-    <h2 class="font-bold text-xl">Sorteio</h2>
-
-    <div id="drawNumbers" class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-3"></div>
-
-    <div class="bg-white p-4 rounded-xl shadow">
-      <h3 class="font-semibold mb-2">Números sorteados</h3>
-      <div id="drawBox" class="flex flex-wrap gap-2"></div>
-    </div>
-
-    <div id="results"></div>
-
-    <div class="flex gap-2">
-      <button onclick="resetDraw()" class="flex-1 bg-orange-500 text-white py-3 rounded-xl">Limpar</button>
-      <button onclick="finalizeContest()" class="flex-1 bg-emerald-600 text-white py-3 rounded-xl">Finalizar</button>
-      <button onclick="goHome()" class="flex-1 bg-slate-500 text-white py-3 rounded-xl">Início</button>
-    </div>
-  </div>
-</section>
-
-<section id="screenHistory" class="hidden p-4">
-  <div class="max-w-4xl mx-auto">
-    <h2 class="font-bold text-xl mb-4">Histórico</h2>
-    <div id="historyList" class="space-y-4"></div>
-    <button onclick="goHome()" class="w-full mt-4 bg-slate-600 text-white py-3 rounded-xl">Voltar</button>
-  </div>
-</section>
+</div>
 
 <script>
-const state = {
-  currentGame: null,
-  selected: [],
-  bets: [],
-  drawn: [],
-  contestId: null,
-  history: JSON.parse(localStorage.getItem('caixa_history_full') || '[]')
-}
+/* ===== CONFIGURAÇÃO DE TODAS AS LOTERIAS CAIXA ===== */
+var games = {
+  megasena: {name:'Mega-Sena', min:6, max:15, range:60, wins:[4,5,6]},
+  lotofacil: {name:'Lotofácil', min:15, max:20, range:25, wins:[11,12,13,14,15]},
+  quina: {name:'Quina', min:5, max:15, range:80, wins:[2,3,4,5]},
+  lotomania: {name:'Lotomania', min:50, max:50, range:100, wins:[20]},
+  timemania: {name:'Timemania', min:10, max:10, range:80, wins:[3,4,5,6,7]},
+  duplasena: {name:'Dupla Sena', min:6, max:15, range:50, wins:[3,4,5,6]},
+  diadesorte: {name:'Dia de Sorte', min:7, max:15, range:31, wins:[4,5,6,7]},
+  supersete: {name:'Super Sete', min:7, max:14, range:10, wins:[3,4,5,6,7]}
+};
 
-const games = {
-  mega:{name:'Mega-Sena',max:60,pickMin:6,pickMax:15,draw:6,win:[4,5,6],color:'bg-mega'},
-  quina:{name:'Quina',max:80,pickMin:5,pickMax:15,draw:5,win:[2,3,4,5],color:'bg-quina'}
-}
+var currentGameKey = null;
+var currentGame = null;
+var bets = [];
+var betNumbers = [];
+var drawn = [];
 
-function showScreen(id){
-  ['screenSelect','screenBets','screenDraw','screenHistory']
-    .forEach(s=>document.getElementById(s).classList.add('hidden'))
-  document.getElementById(id).classList.remove('hidden')
-}
-
-function renderGames(){
-  const grid=document.getElementById('gameGrid')
-  Object.entries(games).forEach(([k,g])=>{
-    const d=document.createElement('div')
-    d.className='bg-white p-4 rounded-xl shadow cursor-pointer'
-    d.innerHTML=`<strong>${g.name}</strong>`
-    d.onclick=()=>selectGame(k)
-    grid.appendChild(d)
-  })
-}
-
-function selectGame(k){
-  state.currentGame=k
-  state.selected=[]
-  state.bets=[]
-  document.getElementById('gameTitle').innerText=games[k].name
-  document.getElementById('rule').innerText=`Escolha ${games[k].pickMin} a ${games[k].pickMax}`
-  showScreen('screenBets')
-  renderPick()
-}
-
-function renderPick(){
-  const g=games[state.currentGame]
-  const el=document.getElementById('pickNumbers')
-  el.innerHTML=''
-  for(let i=1;i<=g.max;i++){
-    const b=document.createElement('div')
-    b.className='border rounded-full text-center py-2 cursor-pointer'
-    b.innerText=i
-    b.onclick=()=>{
-      if(state.selected.includes(i)){
-        state.selected=state.selected.filter(n=>n!==i)
-        b.classList.remove(g.color,'text-white')
-      }else if(state.selected.length<g.pickMax){
-        state.selected.push(i)
-        b.classList.add(g.color,'text-white')
-      }
-    }
-    el.appendChild(b)
+/* ===== INIT ===== */
+(function init(){
+  var cards = document.getElementById('gameCards');
+  for(var k in games){
+    (function(key){
+      var g = games[key];
+      var card = document.createElement('div');
+      card.className = 'bg-white rounded-2xl shadow hover:shadow-lg transition cursor-pointer overflow-hidden';
+      card.innerHTML = '<div class="h-28 bg-gray-200 flex items-center justify-center">LOGO</div>'+
+                       '<div class="p-4">'+
+                       '<h3 class="font-bold">'+g.name+'</h3>'+
+                       '<p class="text-sm text-gray-600">'+g.min+' a '+g.max+' números</p>'+
+                       '</div>';
+      card.onclick = function(){ selectGame(key); };
+      cards.appendChild(card);
+    })(k);
   }
-}
+})();
 
-function addBet(){
-  const g=games[state.currentGame]
-  if(state.selected.length<g.pickMin) return
-  state.bets.push({name:'Jogo '+(state.bets.length+1),numbers:[...state.selected]})
-  state.selected=[]
-  renderPick()
-}
-
-function startDraw(){
-  showScreen('screenDraw')
-}
-
-function resetDraw(){
-  state.drawn=[]
-}
-
-function finalizeContest(){
-  state.history.push({
-    game:games[state.currentGame].name,
-    bets:state.bets,
-    date:new Date().toISOString()
-  })
-  localStorage.setItem('caixa_history_full',JSON.stringify(state.history))
-  goHome()
-}
-
-function openHistory(){
-  const el=document.getElementById('historyList')
-  el.innerHTML=''
-  state.history.forEach(h=>{
-    const d=document.createElement('div')
-    d.className='bg-white p-4 rounded-xl shadow'
-    d.innerHTML=`<strong>${h.game}</strong>`
-    el.appendChild(d)
-  })
-  showScreen('screenHistory')
+/* ===== NAVEGAÇÃO ===== */
+function selectGame(key){
+  currentGameKey = key;
+  currentGame = games[key];
+  bets = [];
+  betNumbers = [];
+  document.getElementById('home').className = 'hidden';
+  document.getElementById('bets').className = '';
+  document.getElementById('draw').className = 'hidden';
+  document.getElementById('betsTitle').innerText = currentGame.name;
+  document.getElementById('betRule').innerText = 'Escolha de '+currentGame.min+' até '+currentGame.max+' números.';
+  renderBetNumbers();
+  renderBetList();
 }
 
 function goHome(){
-  showScreen('screenSelect')
+  document.getElementById('home').className = '';
+  document.getElementById('bets').className = 'hidden';
+  document.getElementById('draw').className = 'hidden';
 }
 
-renderGames()
-</script>
+function goDraw(){
+  if(bets.length === 0){ alert('Cadastre ao menos um jogo.'); return; }
+  drawn = [];
+  document.getElementById('bets').className = 'hidden';
+  document.getElementById('draw').className = '';
+  document.getElementById('drawRule').innerText = 'Sorteie '+currentGame.min+' números.';
+  renderDrawNumbers();
+  updateDrawnList();
+}
 
+/* ===== APOSTAS ===== */
+function renderBetNumbers(){
+  var div = document.getElementById('betNumbers');
+  div.innerHTML = '';
+  for(var i=1;i<=currentGame.range;i++){
+    (function(n){
+      var b = document.createElement('button');
+      b.innerText = n;
+      b.className = 'border rounded-lg p-2';
+      b.onclick = function(){ toggleBet(n,b); };
+      div.appendChild(b);
+    })(i);
+  }
+}
+
+function toggleBet(n, btn){
+  var idx = betNumbers.indexOf(n);
+  if(idx === -1){
+    if(betNumbers.length >= currentGame.max){ alert('Dessa vez você investiu, hein!'); return; }
+    betNumbers.push(n);
+    btn.className = 'bg-green-500 text-white rounded-lg p-2';
+  } else {
+    betNumbers.splice(idx,1);
+    btn.className = 'border rounded-lg p-2';
+  }
+}
+
+function saveBet(){
+  if(betNumbers.length < currentGame.min){ alert('Poucos números.'); return; }
+  var name = document.getElementById('betName').value;
+  if(!name){ name = 'Jogo #' + (bets.length+1); }
+  bets.push({name:name, numbers: betNumbers.slice()});
+  betNumbers = [];
+  document.getElementById('betName').value = '';
+  renderBetNumbers();
+  renderBetList();
+}
+
+function renderBetList(){
+  var div = document.getElementById('betList');
+  div.innerHTML = '';
+  for(var i=0;i<bets.length;i++){
+    var d = document.createElement('div');
+    d.className = 'bg-gray-100 p-2 rounded mb-2';
+    d.innerText = bets[i].name + ': ' + bets[i].numbers.join(', ');
+    div.appendChild(d);
+  }
+}
+
+/* ===== SORTEIO ===== */
+function renderDrawNumbers(){
+  var div = document.getElementById('drawNumbers');
+  div.innerHTML = '';
+  for(var i=1;i<=currentGame.range;i++){
+    (function(n){
+      var b = document.createElement('button');
+      b.innerText = n;
+      b.className = 'border rounded-lg p-2';
+      b.onclick = function(){ toggleDraw(n,b); };
+      div.appendChild(b);
+    })(i);
+  }
+}
+
+function toggleDraw(n, btn){
+  var idx = drawn.indexOf(n);
+  if(idx === -1){
+    if(drawn.length >= currentGame.min){ alert('Sorteio completo.'); return; }
+    drawn.push(n);
+    btn.className = 'bg-blue-500 text-white rounded-lg p-2';
+  } else {
+    drawn.splice(idx,1);
+    btn.className = 'border rounded-lg p-2';
+  }
+  updateDrawnList();
+}
+
+function updateDrawnList(){
+  var div = document.getElementById('drawnList');
+  div.innerHTML = '';
+  var arr = drawn.slice().sort(function(a,b){return a-b});
+  for(var i=0;i<arr.length;i++){
+    var s = document.createElement('span');
+    s.className = 'bg-blue-100 px-3 py-1 rounded-full';
+    s.innerText = arr[i];
+    div.appendChild(s);
+  }
+}
+
+function finishDraw(){
+  var res = document.getElementById('results');
+  res.innerHTML = '';
+  for(var i=0;i<bets.length;i++){
+    var hits = 0;
+    for(var j=0;j<bets[i].numbers.length;j++){
+      if(drawn.indexOf(bets[i].numbers[j]) !== -1){ hits++; }
+    }
+    var d = document.createElement('div');
+    d.className = 'bg-white p-3 rounded-xl shadow mb-2';
+    d.innerHTML = '<strong>'+bets[i].name+'</strong> — '+hits+' acertos';
+    res.appendChild(d);
+  }
+}
+</script>
 </body>
 </html>
