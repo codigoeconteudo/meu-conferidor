@@ -1,337 +1,205 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Conferidor Loterias CAIXA</title>
+  <meta charset="UTF-8">
+  <title>Conferidor Loterias Caixa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config={theme:{extend:{colors:{mega:'#1b9a5a',lotofacil:'#930089',quina:'#0057b7',lotomania:'#f58220',duplasena:'#b51c2c',timemania:'#00a859',diadesorte:'#fdb913',super7:'#e31e24'}}}}
-  </script>
 </head>
-<body class="bg-slate-100 min-h-screen">
-<header class="sticky top-0 z-40 bg-white shadow">
-  <div class="max-w-4xl mx-auto">
-    <div class="rounded-b-3xl overflow-hidden">
-      <div id="headerImage" class="h-28 flex items-center justify-center bg-slate-800">
-        <img id="gameLogo" src="assets/placeholder.png" class="h-16 object-contain" />
-      </div>
-      <div class="flex items-center justify-between p-4">
-        <h1 class="text-lg font-semibold">Conferidor Loterias CAIXA</h1>
-        <button onclick="openHistory()" class="text-sm bg-slate-700 text-white px-3 py-2 rounded-xl">Histórico</button>
-      </div>
-    </div>
+<body class="bg-gray-100 text-gray-900">
+
+<div class="max-w-5xl mx-auto p-4">
+  <h1 class="text-2xl font-bold mb-4">🎰 Conferidor Loterias Caixa</h1>
+
+  <!-- HOME -->
+  <div id="home">
+    <p class="mb-4">Escolha a modalidade:</p>
+    <div id="games" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
   </div>
-</header>
 
-<!-- TELA INICIAL -->
-<section id="screenSelect" class="p-4">
-  <div class="max-w-5xl mx-auto">
-    <h2 class="text-lg font-bold mb-4">Escolha a modalidade</h2>
-    <div id="gameGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+  <!-- APOSTAS -->
+  <div id="bets" class="hidden">
+    <button onclick="goHome()" class="mb-4 text-blue-600">← Voltar</button>
+    <h2 id="betsTitle" class="text-xl font-semibold mb-2"></h2>
+    <input id="betName" class="border p-2 w-full mb-2" placeholder="Nome do jogo (opcional)">
+    <div id="betNumbers" class="grid grid-cols-6 gap-2 mb-4"></div>
+    <button onclick="saveBet()" class="bg-green-600 text-white px-4 py-2 rounded">Salvar jogo</button>
+    <div id="betList" class="mt-4"></div>
+    <button onclick="goDraw()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded">Ir para sorteio</button>
   </div>
-</section>
 
-<!-- TELA JOGOS -->
-<section id="screenBets" class="hidden p-4 space-y-4">
-  <div class="max-w-4xl mx-auto space-y-4">
-    <div>
-      <h2 id="gameTitle" class="text-xl font-bold"></h2>
-      <p id="rule" class="text-sm text-slate-600"></p>
-    </div>
-
-    <input id="contest" class="w-full p-4 rounded-2xl border" placeholder="Número do concurso (ex: 2701)" />
-    <input id="betName" class="w-full p-4 rounded-2xl border" placeholder="Nome do jogo (opcional)" />
-
-    <div id="pickNumbers" class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-3"></div>
-
-    <div class="flex flex-col sm:flex-row gap-3">
-      <button onclick="addBet()" class="flex-1 py-4 rounded-2xl bg-blue-600 text-white font-semibold">Adicionar jogo</button>
-      <button onclick="startDraw()" class="flex-1 py-4 rounded-2xl bg-slate-600 text-white">Conferir sorteio</button>
-      <button onclick="goHome()" class="flex-1 py-4 rounded-2xl bg-slate-400 text-white">Início</button>
-    </div>
-
-    <div>
-      <h3 class="font-bold mt-6 mb-2">Jogos adicionados</h3>
-      <div id="bets" class="space-y-3"></div>
-    </div>
+  <!-- SORTEIO -->
+  <div id="draw" class="hidden">
+    <button onclick="goHome()" class="mb-4 text-blue-600">← Início</button>
+    <h2 class="text-xl font-semibold mb-2">Sorteio</h2>
+    <div id="drawNumbers" class="grid grid-cols-6 gap-2 mb-4"></div>
+    <div class="mb-2">Números sorteados:</div>
+    <div id="drawnList" class="flex flex-wrap gap-2 mb-4"></div>
+    <button onclick="finishDraw()" class="bg-purple-600 text-white px-4 py-2 rounded">Finalizar sorteio</button>
+    <div id="results" class="mt-4"></div>
   </div>
-</section>
-
-<!-- TELA SORTEIO -->
-<section id="screenDraw" class="hidden p-4 space-y-4">
-  <div class="max-w-4xl mx-auto space-y-4">
-    <h2 class="text-xl font-bold">Sorteio</h2>
-    <div id="drawNumbers" class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-3"></div>
-
-    <div class="bg-white rounded-3xl p-4 shadow">
-      <h3 class="font-bold mb-2">Números Sorteados</h3>
-      <div id="drawBox" class="flex flex-wrap gap-2"></div>
-    </div>
-
-    <div class="flex flex-col sm:flex-row gap-3">
-      <button onclick="resetDraw()" class="flex-1 py-4 rounded-2xl bg-orange-500 text-white">Limpar sorteio</button>
-      <button onclick="goHome()" class="flex-1 py-4 rounded-2xl bg-slate-500 text-white">Início</button>
-      <button onclick="finalizeContest()" class="flex-1 py-4 rounded-2xl bg-emerald-600 text-white">Finalizar concurso</button>
-    </div>
-
-    <div>
-      <h3 class="font-bold mt-6 mb-2">Resultados</h3>
-      <div>
-      <h3 class="font-bold mt-6 mb-2">Conferência dos Jogos</h3>
-      <div id="results" class="space-y-4"></div>
-    </div>
-    </div>
-  </div>
-</section>
-
-<!-- TELA HISTÓRICO -->
-<section id="screenHistory" class="hidden p-4 space-y-4">
-  <div class="max-w-4xl mx-auto space-y-4">
-    <h2 class="text-xl font-bold">📜 Histórico de Concursos</h2>
-    <div id="historyList" class="space-y-3"></div>
-    <button onclick="goHome()" class="w-full py-4 rounded-2xl bg-slate-600 text-white">Voltar</button>
-  </div>
-</section>
+</div>
 
 <script>
-/************** UTIL **************/
-function toast(msg, time){
-  if(time===undefined) time=2500
-  const t=document.createElement('div')
-  t.innerText=msg
-  t.className='fixed bottom-6 left-1/2 -translate-x-1/2 bg-black text-white px-5 py-3 rounded-2xl shadow-xl z-50'
-  document.body.appendChild(t)
-  setTimeout(function(){ t.remove() }, time)
-}
+// ===== CONFIGURAÇÕES DOS JOGOS =====
+var gamesConfig = {
+  megasena: { name: 'Mega-Sena', min: 6, max: 15, range: 60, win: [4,5,6] },
+  lotofacil: { name: 'Lotofácil', min: 15, max: 20, range: 25, win: [11,12,13,14,15] },
+  quina: { name: 'Quina', min: 5, max: 15, range: 80, win: [2,3,4,5] },
+  lotomania: { name: 'Lotomania', min: 50, max: 50, range: 100, win: [20] }
+};
 
-/************** JOGOS **************/
-const games={
-  mega:{name:'Mega-Sena',max:60,pickMin:6,pickMax:15,draw:6,win:[4,5,6],logo:'assets/mega.png',color:'bg-mega'},
-  lotofacil:{name:'Lotofácil',max:25,pickMin:15,pickMax:20,draw:15,win:[11,12,13,14,15],logo:'assets/lotofacil.png',color:'bg-lotofacil'},
-  quina:{name:'Quina',max:80,pickMin:5,pickMax:15,draw:5,win:[2,3,4,5],logo:'assets/quina.png',color:'bg-quina'},
-  lotomania:{name:'Lotomania',max:100,pickMin:50,pickMax:50,draw:20,win:[0,20],logo:'assets/lotomania.png',color:'bg-lotomania'},
-  duplasena:{name:'Dupla Sena',max:50,pickMin:6,pickMax:15,draw:6,win:[3,4,5,6],logo:'assets/duplasena.png',color:'bg-duplasena'},
-  timemania:{name:'Timemania',max:80,pickMin:10,pickMax:10,draw:7,win:[3,4,5,6,7],logo:'assets/timemania.png',color:'bg-timemania'},
-  diadesorte:{name:'Dia de Sorte',max:31,pickMin:7,pickMax:15,draw:7,win:[4,5,6,7],logo:'assets/diadesorte.png',color:'bg-diadesorte'},
-  super7:{name:'Super Sete',max:9,pickMin:7,pickMax:21,draw:7,win:[3,4,5,6,7],logo:'assets/super7.png',color:'bg-super7'}
-}
+var currentGame = null;
+var currentBets = [];
+var currentBetNumbers = [];
+var drawnNumbers = [];
 
-let currentGame=null,selected=[],bets=[],drawn=[],contestId=null
-let history=JSON.parse(localStorage.getItem('caixa_history_full')||'[]')
-
-function saveHistory(){localStorage.setItem('caixa_history_full',JSON.stringify(history))}
-
-/************** GRID INICIAL **************/
-const grid=document.getElementById('gameGrid')
-Object.entries(games).forEach(([k,g])=>{
-  const c=document.createElement('div')
-  c.className='bg-white rounded-3xl p-4 shadow-md cursor-pointer transition transform hover:-translate-y-1 hover:shadow-xl'
-  c.innerHTML=`
-  <div class="rounded-2xl overflow-hidden shadow">
-    <div class="h-24 flex items-center justify-center ${g.color}">
-      <img src="${g.logo}" class="h-14 object-contain" />
-    </div>
-    <div class="p-4 text-center">
-      <h3 class="font-bold">${g.name}</h3>
-      <p class="text-xs text-slate-500 mt-1">Escolha ${g.pickMin} a ${g.pickMax}</p>
-    </div>
-  </div>`
-  c.onclick=()=>selectGame(k)
-  grid.appendChild(c)
-})
-
-function selectGame(k){
-  currentGame=k;selected=[];bets=[];drawn=[]
-  document.getElementById('gameLogo').src=games[k].logo
-  document.getElementById('gameTitle').innerText=games[k].name
-  document.getElementById('rule').innerText=`Marque ${games[k].pickMin} a ${games[k].pickMax} números (1–${games[k].max})`
-  document.getElementById('screenSelect').classList.add('hidden')
-  document.getElementById('screenBets').classList.remove('hidden')
-  renderPick();renderBets()
-}
-
-/************** VOLANTE **************/
-function renderPick(){
-  const g=games[currentGame],el=document.getElementById('pickNumbers');el.innerHTML=''
-  for(let i=1;i<=g.max;i++){
-    const b=document.createElement('div')
-    b.className='rounded-full bg-white border border-slate-300 text-slate-800 py-3 text-center font-bold cursor-pointer'
-    b.innerText=i
-    b.onclick=()=>{
-      if(selected.includes(i)){
-        selected=selected.filter(n=>n!==i)
-        b.className='rounded-full bg-white border border-slate-300 text-slate-800 py-3 text-center font-bold cursor-pointer'
-      } else if(selected.length<g.pickMax){
-        selected.push(i)
-        b.className=`rounded-full ${g.color} text-white py-3 text-center font-bold cursor-pointer`
-        if(selected.length>g.pickMin) toast('😅 Essa aposta ficou mais reforçada, hein! Boa sorte!')
-      }
-    }
-    el.appendChild(b)
+// ===== INIT =====
+(function init(){
+  var gamesDiv = document.getElementById('games');
+  for(var key in gamesConfig){
+    (function(k){
+      var g = gamesConfig[k];
+      var card = document.createElement('div');
+      card.className = 'bg-white p-4 rounded-xl shadow cursor-pointer hover:shadow-lg transition';
+      card.innerHTML = '<div class="h-24 bg-gray-200 rounded mb-2 flex items-center justify-center">LOGO</div>'+
+                       '<h3 class="font-bold">'+g.name+'</h3>'+
+                       '<p class="text-sm">'+g.min+' a '+g.max+' números</p>';
+      card.onclick = function(){ selectGame(k); };
+      gamesDiv.appendChild(card);
+    })(key);
   }
-}
+})();
 
-/************** JOGOS **************/
-function addBet(){
-  const g=games[currentGame]
-  if(selected.length<g.pickMin){toast('❌ Marque pelo menos '+g.pickMin+' números');return}
-  const name=document.getElementById('betName').value||`Jogo #${bets.length+1}`
-  contestId=document.getElementById('contest').value||'sem-concurso'
-  bets.push({name,numbers:[...selected]})
-  selected=[]
-  renderPick();renderBets()
-}
-
-function renderBets(){
-  const el=document.getElementById('bets');el.innerHTML=''
-  if(bets.length===0){el.innerHTML='<p class="text-slate-500">Nenhum jogo adicionado ainda.</p>';return}
-  bets.forEach(b=>{
-    el.innerHTML+=`<div class="bg-white rounded-3xl p-4 shadow"><strong>${b.name}</strong><div class="flex flex-wrap gap-2 mt-2">${b.numbers.map(n=>`<span class="px-3 py-1 bg-slate-200 rounded-xl">${n}</span>`).join('')}</div></div>`
-  })
-}
-
-/************** SORTEIO **************/
-function startDraw(){
-  if(bets.length===0){toast('⚠️ Adicione pelo menos um jogo antes de conferir');return}
-  document.getElementById('screenBets').classList.add('hidden')
-  document.getElementById('screenDraw').classList.remove('hidden')
-  const g=games[currentGame],el=document.getElementById('drawNumbers');el.innerHTML='';drawn=[]
-  for(let i=1;i<=g.max;i++){
-    const b=document.createElement('div')
-    b.className='rounded-full bg-white border border-slate-300 py-3 text-center font-bold cursor-pointer'
-    b.innerText=i
-    b.onclick=()=>toggleDraw(i,b)
-    el.appendChild(b)
-  }
-  updateDrawBox()
-}
-
-function toggleDraw(n,el){
-  const g=games[currentGame]
-  if(drawn.includes(n)){
-    drawn=drawn.filter(x=>x!==n)
-    el.className='rounded-full bg-white border border-slate-300 py-3 text-center font-bold cursor-pointer'
-  } else if(drawn.length<g.draw){
-    drawn.push(n)
-    el.className='rounded-full bg-emerald-600 text-white py-3 text-center font-bold cursor-pointer animate-pulse'
-  }
-  updateDrawBox();checkResults()
-}
-
-function updateDrawBox(){
-  const box=document.getElementById('drawBox');box.innerHTML=''
-  drawn.slice().sort((a,b)=>a-b).forEach(n=>box.innerHTML+=`<span class="px-3 py-1 bg-emerald-600 text-white rounded-xl">${n}</span>`)
-}
-
-function resetDraw(){drawn=[];startDraw()}
-
-/************** RESULTADOS **************/
-function checkResults(){
-  const g=games[currentGame]
-  const res=document.getElementById('results')
-  res.innerHTML=''
-
-  bets.forEach(b=>{
-    const hits=b.numbers.filter(n=>drawn.includes(n))
-    const win=g.win.includes(hits.length)
-
-    const nums=b.numbers.map(n=>{
-      const hit=drawn.includes(n)
-      return `<span class="px-3 py-1 rounded-xl font-semibold ${hit?'bg-emerald-600 text-white':'bg-slate-200 text-slate-700'}">${n}</span>`
-    }).join('')
-
-    res.innerHTML+=`
-      <div class="bg-white rounded-3xl p-4 shadow ${win?'animate-bounce':''}">
-        <div class="flex items-center justify-between mb-2">
-          <strong>${b.name}</strong>
-          <span class="text-sm font-semibold">${hits.length} acertos</span>
-        </div>
-        <div class="flex flex-wrap gap-2">${nums}</div>
-        ${win?'<p class="text-emerald-600 font-bold mt-2">🎉 Premiado!</p>':''}
-      </div>`
-  })
-}
-/************** HISTÓRICO **************/
-function finalizeContest(){
-  const g=games[currentGame]
-  const detailedBets=bets.map(b=>{
-    const hits=b.numbers.filter(n=>drawn.includes(n))
-    return {
-      name:b.name,
-      numbers:b.numbers,
-      hits:hits,
-      hitCount:hits.length,
-      win:g.win.includes(hits.length)
-    }
-  })
-
-  history.push({
-    game: g.name,
-    contest: contestId,
-    drawn: drawn.slice().sort(function(a,b){return a-b}),
-    bets: detailedBets,
-    date: new Date().toISOString()
-  })
-  saveHistory()
-  toast('📌 Concurso salvo no histórico',2000)
-  goHome()
-}
-
-function openHistory(){
-  document.getElementById('screenSelect').classList.add('hidden')
-  document.getElementById('screenHistory').classList.remove('hidden')
-  const el=document.getElementById('historyList')
-  el.innerHTML=''
-
-  if(history.length===0){
-    el.innerHTML='<p class="text-slate-500">Nenhum concurso salvo ainda.</p>'
-    return
-  }
-
-  history.slice().reverse().forEach(h=>{
-    const total=h.bets.length
-    const wins=h.bets.filter(b=>b.win).length
-
-    const betsHtml=h.bets.map(b=>{
-      const nums=b.numbers.map(n=>{
-        const hit=b.hits.includes(n)
-        return `<span class="px-2 py-1 rounded-lg text-xs font-semibold ${hit?'bg-emerald-600 text-white':'bg-slate-200'}">${n}</span>`
-      }).join('')
-
-      return `
-        <div class="border rounded-2xl p-3 mt-3">
-          <div class="flex justify-between text-sm font-semibold">
-            <span>${b.name}</span>
-            <span>${b.hitCount} acertos</span>
-          </div>
-          <div class="flex flex-wrap gap-1 mt-2">${nums}</div>
-          ${b.win?'<p class="text-emerald-600 font-bold mt-1">🎉 Premiado</p>':''}
-        </div>`
-    }).join('')
-
-    el.innerHTML+=`
-      <div class="bg-white rounded-3xl p-4 shadow">
-        <div class="flex justify-between items-center mb-2">
-          <strong>${h.game} — Concurso ${h.contest}</strong>
-          <span class="text-xs text-slate-500">${new Date(h.date).toLocaleDateString()}</span>
-        </div>
-        <p class="text-sm mb-2">🎯 Números sorteados: ${h.drawn.join(', ')}</p>
-        <p class="text-sm font-semibold">Jogos: ${total} | Premiados: ${wins}</p>
-        ${betsHtml}
-      </div>`
-  })
-}
-  history.forEach(h=>{
-    el.innerHTML+=`<div class="bg-white rounded-3xl p-4 shadow"><strong>${h.game} — Concurso ${h.contest}</strong><p class="text-sm mt-1">Sorteio: ${h.drawn.join(', ')}</p></div>`
-  })
+// ===== NAVEGAÇÃO =====
+function selectGame(key){
+  currentGame = gamesConfig[key];
+  currentBets = [];
+  currentBetNumbers = [];
+  document.getElementById('home').className = 'hidden';
+  document.getElementById('bets').className = '';
+  document.getElementById('betsTitle').innerText = currentGame.name;
+  renderBetNumbers();
+  renderBetList();
 }
 
 function goHome(){
-  document.getElementById('screenSelect').classList.remove('hidden')
-  document.getElementById('screenBets').classList.add('hidden')
-  document.getElementById('screenDraw').classList.add('hidden')
-  document.getElementById('screenHistory').classList.add('hidden')
+  document.getElementById('home').className = '';
+  document.getElementById('bets').className = 'hidden';
+  document.getElementById('draw').className = 'hidden';
+}
+
+function goDraw(){
+  if(currentBets.length === 0){ alert('Cadastre ao menos um jogo'); return; }
+  document.getElementById('bets').className = 'hidden';
+  document.getElementById('draw').className = '';
+  drawnNumbers = [];
+  renderDrawNumbers();
+  updateDrawnList();
+}
+
+// ===== APOSTAS =====
+function renderBetNumbers(){
+  var div = document.getElementById('betNumbers');
+  div.innerHTML = '';
+  for(var i=1;i<=currentGame.range;i++){
+    (function(n){
+      var b = document.createElement('button');
+      b.innerText = n;
+      b.className = 'border rounded p-2';
+      b.onclick = function(){ toggleBetNumber(n,b); };
+      div.appendChild(b);
+    })(i);
+  }
+}
+
+function toggleBetNumber(n, btn){
+  var idx = currentBetNumbers.indexOf(n);
+  if(idx === -1){
+    if(currentBetNumbers.length >= currentGame.max){ alert('Máximo atingido'); return; }
+    currentBetNumbers.push(n);
+    btn.className = 'bg-green-500 text-white rounded p-2';
+  } else {
+    currentBetNumbers.splice(idx,1);
+    btn.className = 'border rounded p-2';
+  }
+}
+
+function saveBet(){
+  if(currentBetNumbers.length < currentGame.min){ alert('Poucos números'); return; }
+  var name = document.getElementById('betName').value;
+  if(!name){ name = 'Jogo #' + (currentBets.length+1); }
+  currentBets.push({ name:name, numbers: currentBetNumbers.slice() });
+  currentBetNumbers = [];
+  document.getElementById('betName').value = '';
+  renderBetNumbers();
+  renderBetList();
+}
+
+function renderBetList(){
+  var div = document.getElementById('betList');
+  div.innerHTML = '';
+  for(var i=0;i<currentBets.length;i++){
+    var p = document.createElement('div');
+    p.className = 'bg-gray-100 p-2 rounded mb-1';
+    p.innerText = currentBets[i].name + ': ' + currentBets[i].numbers.join(', ');
+    div.appendChild(p);
+  }
+}
+
+// ===== SORTEIO =====
+function renderDrawNumbers(){
+  var div = document.getElementById('drawNumbers');
+  div.innerHTML = '';
+  for(var i=1;i<=currentGame.range;i++){
+    (function(n){
+      var b = document.createElement('button');
+      b.innerText = n;
+      b.className = 'border rounded p-2';
+      b.onclick = function(){ toggleDraw(n,b); };
+      div.appendChild(b);
+    })(i);
+  }
+}
+
+function toggleDraw(n, btn){
+  var idx = drawnNumbers.indexOf(n);
+  if(idx === -1){
+    if(drawnNumbers.length >= currentGame.min){ alert('Sorteio completo'); return; }
+    drawnNumbers.push(n);
+    btn.className = 'bg-blue-500 text-white rounded p-2';
+  } else {
+    drawnNumbers.splice(idx,1);
+    btn.className = 'border rounded p-2';
+  }
+  updateDrawnList();
+}
+
+function updateDrawnList(){
+  var div = document.getElementById('drawnList');
+  div.innerHTML = '';
+  var arr = drawnNumbers.slice().sort(function(a,b){return a-b});
+  for(var i=0;i<arr.length;i++){
+    var s = document.createElement('span');
+    s.className = 'bg-blue-100 px-3 py-1 rounded-full';
+    s.innerText = arr[i];
+    div.appendChild(s);
+  }
+}
+
+function finishDraw(){
+  var res = document.getElementById('results');
+  res.innerHTML = '';
+  for(var i=0;i<currentBets.length;i++){
+    var hits = 0;
+    for(var j=0;j<currentBets[i].numbers.length;j++){
+      if(drawnNumbers.indexOf(currentBets[i].numbers[j]) !== -1){ hits++; }
+    }
+    var d = document.createElement('div');
+    d.className = 'bg-white p-3 rounded shadow mb-2';
+    d.innerHTML = '<strong>'+currentBets[i].name+'</strong> — '+hits+' acertos';
+    res.appendChild(d);
+  }
 }
 </script>
 </body>
