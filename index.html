@@ -96,7 +96,7 @@
 
 <script>
 /************** UTIL **************/
-function toast(msg){const t=document.createElement('div');t.innerText=msg;t.className='fixed bottom-6 left-1/2 -translate-x-1/2 bg-black text-white px-5 py-3 rounded-2xl shadow-xl z-50';document.body.appendChild(t);setTimeout(()=>t.remove(),2500)}
+function toast(msg,time=2500){msg){const t=document.createElement('div');t.innerText=msg;t.className='fixed bottom-6 left-1/2 -translate-x-1/2 bg-black text-white px-5 py-3 rounded-2xl shadow-xl z-50';document.body.appendChild(t);setTimeout(()=>t.remove(),time)}
 
 /************** JOGOS **************/
 const games={
@@ -247,7 +247,23 @@ function checkResults(){
 }
 /************** HISTÓRICO **************/
 function finalizeContest(){
-  history.push({game:games[currentGame].name,contest:contestId,bets,drawn})
+  const g=games[currentGame]
+  const detailedBets=bets.map(b=>{
+    const hits=b.numbers.filtetoast('📌 Concurso salvo no histórico',2000)    name:b.name,
+      numbers:b.numbers,
+      hits:hits,
+      hitCount:hits.length,
+      win:g.win.includes(hits.length)
+    }
+  })
+
+  history.push({
+    game: g.name,
+    contest: contestId,
+    drawn: [...drawn].sort((a,b)=>a-b),
+    bets: detailedBets,
+    date: new Date().toISOString()
+  })
   saveHistory()
   toast('📌 Concurso salvo no histórico')
   goHome()
@@ -256,8 +272,47 @@ function finalizeContest(){
 function openHistory(){
   document.getElementById('screenSelect').classList.add('hidden')
   document.getElementById('screenHistory').classList.remove('hidden')
-  const el=document.getElementById('historyList');el.innerHTML=''
-  if(history.length===0){el.innerHTML='<p class="text-slate-500">Nenhum concurso salvo ainda.</p>';return}
+  const el=document.getElementById('historyList')
+  el.innerHTML=''
+
+  if(history.length===0){
+    el.innerHTML='<p class="text-slate-500">Nenhum concurso salvo ainda.</p>'
+    return
+  }
+
+  history.slice().reverse().forEach(h=>{
+    const total=h.bets.length
+    const wins=h.bets.filter(b=>b.win).length
+
+    const betsHtml=h.bets.map(b=>{
+      const nums=b.numbers.map(n=>{
+        const hit=b.hits.includes(n)
+        return `<span class="px-2 py-1 rounded-lg text-xs font-semibold ${hit?'bg-emerald-600 text-white':'bg-slate-200'}">${n}</span>`
+      }).join('')
+
+      return `
+        <div class="border rounded-2xl p-3 mt-3">
+          <div class="flex justify-between text-sm font-semibold">
+            <span>${b.name}</span>
+            <span>${b.hitCount} acertos</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">${nums}</div>
+          ${b.win?'<p class="text-emerald-600 font-bold mt-1">🎉 Premiado</p>':''}
+        </div>`
+    }).join('')
+
+    el.innerHTML+=`
+      <div class="bg-white rounded-3xl p-4 shadow">
+        <div class="flex justify-between items-center mb-2">
+          <strong>${h.game} — Concurso ${h.contest}</strong>
+          <span class="text-xs text-slate-500">${new Date(h.date).toLocaleDateString()}</span>
+        </div>
+        <p class="text-sm mb-2">🎯 Números sorteados: ${h.drawn.join(', ')}</p>
+        <p class="text-sm font-semibold">Jogos: ${total} | Premiados: ${wins}</p>
+        ${betsHtml}
+      </div>`
+  })
+}
   history.forEach(h=>{
     el.innerHTML+=`<div class="bg-white rounded-3xl p-4 shadow"><strong>${h.game} — Concurso ${h.contest}</strong><p class="text-sm mt-1">Sorteio: ${h.drawn.join(', ')}</p></div>`
   })
