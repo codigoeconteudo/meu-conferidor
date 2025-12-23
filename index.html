@@ -34,22 +34,23 @@
 <body class="bg-slate-100 min-h-screen">
 
 <!-- HEADER -->
-<header class="sticky top-0 z-50 bg-gradient-to-r from-slate-900 to-slate-700 text-white shadow-lg">
-  <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+<header class="sticky top-0 z-50 bg-gradient-to-r from-slate-900 to-slate-700 text-white shadow">
+  <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
     <div class="flex items-center gap-3">
       <img id="gameLogo" src="assets/logo.png" class="h-10 w-10 rounded-xl bg-white p-1">
       <div>
         <h1 class="font-bold leading-tight">Conferidor CAIXA</h1>
-        <p class="text-xs text-slate-300">Simples, rápido e prático</p>
+        <p class="text-xs text-slate-300">Rápido e prático</p>
       </div>
     </div>
-    <button onclick="openHistory()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl text-sm">
+    <button onclick="openHistory()"
+      class="px-4 py-2 text-sm rounded-xl bg-white/10 hover:bg-white/20">
       Histórico
     </button>
   </div>
 </header>
 
-<!-- TELA SELEÇÃO -->
+<!-- SELEÇÃO -->
 <section id="screenSelect" class="p-6">
   <div class="max-w-6xl mx-auto">
     <h2 class="text-xl font-bold mb-6">Escolha a modalidade</h2>
@@ -57,7 +58,7 @@
   </div>
 </section>
 
-<!-- TELA JOGOS -->
+<!-- JOGOS -->
 <section id="screenBets" class="hidden p-6">
   <div class="max-w-4xl mx-auto space-y-6">
 
@@ -67,33 +68,38 @@
     </div>
 
     <div class="grid sm:grid-cols-2 gap-4">
-      <input id="contest" class="w-full p-4 rounded-xl border focus:ring-2 focus:ring-blue-500" placeholder="Número do concurso">
-      <input id="betName" class="w-full p-4 rounded-xl border focus:ring-2 focus:ring-blue-500" placeholder="Nome do jogo (opcional)">
+      <input id="contest" class="p-3 rounded-xl border focus:ring-2 focus:ring-blue-500"
+        placeholder="Número do concurso">
+      <input id="betName" class="p-3 rounded-xl border focus:ring-2 focus:ring-blue-500"
+        placeholder="Nome do jogo (opcional)">
     </div>
 
     <div id="pickNumbers" class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-3"></div>
 
-    <div class="flex flex-col sm:flex-row gap-3">
-      <button onclick="addBet()" class="flex-1 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-semibold">
+    <div class="flex flex-wrap gap-3">
+      <button onclick="addBet()"
+        class="px-5 py-2.5 text-sm rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold">
         Adicionar jogo
       </button>
-      <button onclick="startDraw()" class="flex-1 py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white">
+      <button onclick="startDraw()"
+        class="px-5 py-2.5 text-sm rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold">
         Conferir sorteio
       </button>
-      <button onclick="goHome()" class="flex-1 py-4 rounded-2xl bg-slate-300 hover:bg-slate-400">
+      <button onclick="goHome()"
+        class="px-5 py-2.5 text-sm rounded-xl bg-slate-300 hover:bg-slate-400 font-semibold">
         Início
       </button>
     </div>
 
     <div>
-      <h3 class="font-bold mt-6 mb-2">Jogos adicionados</h3>
-      <div id="bets" class="space-y-3"></div>
+      <h3 class="font-bold mt-4 mb-2">Jogos adicionados</h3>
+      <div id="betsList" class="space-y-3"></div>
     </div>
 
   </div>
 </section>
 
-<!-- TELA SORTEIO -->
+<!-- SORTEIO -->
 <section id="screenDraw" class="hidden p-6">
   <div class="max-w-4xl mx-auto space-y-6">
 
@@ -101,25 +107,28 @@
 
     <div id="drawNumbers" class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-3"></div>
 
-    <div class="bg-white rounded-3xl p-4 shadow">
+    <div class="bg-white rounded-2xl p-4 shadow">
       <h3 class="font-bold mb-2">Números sorteados</h3>
       <div id="drawBox" class="flex flex-wrap gap-2"></div>
     </div>
 
-    <div class="flex flex-col sm:flex-row gap-3">
-      <button onclick="resetDraw()" class="flex-1 py-4 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white">
+    <div class="flex flex-wrap gap-3">
+      <button onclick="resetDraw()"
+        class="px-5 py-2.5 text-sm rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-semibold">
         Limpar sorteio
       </button>
-      <button onclick="finalizeContest()" class="flex-1 py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white">
+      <button onclick="finalizeContest()"
+        class="px-5 py-2.5 text-sm rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold">
         Finalizar concurso
       </button>
-      <button onclick="goHome()" class="flex-1 py-4 rounded-2xl bg-slate-400 hover:bg-slate-500 text-white">
+      <button onclick="goHome()"
+        class="px-5 py-2.5 text-sm rounded-xl bg-slate-400 hover:bg-slate-500 text-white font-semibold">
         Início
       </button>
     </div>
 
     <div>
-      <h3 class="font-bold mt-6 mb-2">Resultados</h3>
+      <h3 class="font-bold mt-4 mb-2">Resultados</h3>
       <div id="results" class="space-y-4"></div>
     </div>
 
@@ -129,9 +138,10 @@
 <!-- HISTÓRICO -->
 <section id="screenHistory" class="hidden p-6">
   <div class="max-w-4xl mx-auto space-y-4">
-    <h2 class="text-2xl font-bold">Histórico de Concursos</h2>
+    <h2 class="text-2xl font-bold">Histórico</h2>
     <div id="historyList" class="space-y-3"></div>
-    <button onclick="goHome()" class="w-full py-4 rounded-2xl bg-slate-600 hover:bg-slate-700 text-white">
+    <button onclick="goHome()"
+      class="w-full px-5 py-2.5 text-sm rounded-xl bg-slate-600 hover:bg-slate-700 text-white font-semibold">
       Voltar
     </button>
   </div>
@@ -140,16 +150,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.4.1/flowbite.min.js"></script>
 
 <script>
-/* ========= UTIL ========= */
 function toast(msg){
   const t=document.createElement('div')
   t.innerText=msg
-  t.className='fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-lg z-50'
+  t.className='fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-5 py-3 rounded-xl shadow z-50'
   document.body.appendChild(t)
   setTimeout(()=>t.remove(),2500)
 }
 
-/* ========= JOGOS ========= */
 const games={
   mega:{name:'Mega-Sena',max:60,pickMin:6,pickMax:15,draw:6,win:[4,5,6],logo:'assets/mega.png',color:'bg-mega'},
   lotofacil:{name:'Lotofácil',max:25,pickMin:15,pickMax:20,draw:15,win:[11,12,13,14,15],logo:'assets/lotofacil.png',color:'bg-lotofacil'},
@@ -164,17 +172,16 @@ const games={
 let currentGame=null,selected=[],bets=[],drawn=[],contestId=null
 let history=JSON.parse(localStorage.getItem('caixa_history_full')||'[]')
 
-/* ========= GRID ========= */
 const grid=document.getElementById('gameGrid')
 Object.entries(games).forEach(([k,g])=>{
   const c=document.createElement('div')
-  c.className='bg-white rounded-3xl shadow-md hover:shadow-xl transition cursor-pointer overflow-hidden'
+  c.className='bg-white rounded-3xl shadow hover:shadow-xl cursor-pointer overflow-hidden'
   c.innerHTML=`
     <div class="h-28 flex items-center justify-center ${g.color}">
       <img src="${g.logo}" class="h-16">
     </div>
     <div class="p-4 text-center">
-      <h3 class="font-bold text-lg">${g.name}</h3>
+      <h3 class="font-bold">${g.name}</h3>
       <p class="text-sm text-slate-500">${g.pickMin} a ${g.pickMax} números</p>
     </div>`
   c.onclick=()=>selectGame(k)
@@ -191,76 +198,130 @@ function selectGame(k){
   renderPick();renderBets()
 }
 
-/* ========= VOLANTE ========= */
 function renderPick(){
   const g=games[currentGame],el=pickNumbers
   el.innerHTML=''
   for(let i=1;i<=g.max;i++){
     const b=document.createElement('div')
     b.innerText=i
-    b.className='w-12 h-12 flex items-center justify-center rounded-full bg-white border font-bold cursor-pointer hover:bg-slate-100'
+    b.className='w-11 h-11 flex items-center justify-center rounded-full bg-white border font-bold cursor-pointer'
     b.onclick=()=>{
       if(selected.includes(i)){
         selected=selected.filter(n=>n!==i)
-        b.className='w-12 h-12 flex items-center justify-center rounded-full bg-white border font-bold cursor-pointer'
+        b.className='w-11 h-11 flex items-center justify-center rounded-full bg-white border font-bold cursor-pointer'
       } else if(selected.length<g.pickMax){
         selected.push(i)
-        b.className=`w-12 h-12 flex items-center justify-center rounded-full ${g.color} text-white font-bold scale-110`
+        b.className=`w-11 h-11 flex items-center justify-center rounded-full ${g.color} text-white font-bold scale-110`
       }
     }
     el.appendChild(b)
   }
 }
 
-/* ========= JOGOS ========= */
 function addBet(){
   const g=games[currentGame]
-  if(selected.length<g.pickMin){toast('Marque pelo menos '+g.pickMin+' números');return}
+  if(selected.length<g.pickMin){toast(`Marque pelo menos ${g.pickMin} números`);return}
   const name=betName.value||`Jogo #${bets.length+1}`
   contestId=contest.value||'sem-concurso'
   bets.push({name,numbers:[...selected]})
-  selected=[]
+  selected=[];betName.value=''
   renderPick();renderBets()
 }
 
 function renderBets(){
-  bets.innerHTML=bets.length?'':
-    '<p class="text-slate-500">Nenhum jogo adicionado.</p>'
+  const el=document.getElementById('betsList')
+  el.innerHTML=bets.length?'':'<p class="text-slate-500 text-sm">Nenhum jogo adicionado.</p>'
   bets.forEach(b=>{
-    bets.innerHTML+=`
-      <div class="bg-white rounded-2xl p-4 shadow">
+    el.innerHTML+=`
+      <div class="bg-white rounded-xl p-4 shadow">
         <strong>${b.name}</strong>
         <div class="flex flex-wrap gap-2 mt-2">
-          ${b.numbers.map(n=>`<span class="px-3 py-1 bg-slate-200 rounded-xl">${n}</span>`).join('')}
+          ${b.numbers.map(n=>`<span class="px-3 py-1 bg-slate-200 rounded-lg text-sm">${n}</span>`).join('')}
         </div>
       </div>`
   })
 }
 
-/* ========= SORTEIO / RESULTADO / HISTÓRICO ========= */
-/* (mantido igual ao seu funcionamento original) */
+function startDraw(){
+  if(bets.length===0){toast('Adicione pelo menos um jogo');return}
+  screenBets.classList.add('hidden')
+  screenDraw.classList.remove('hidden')
+  const g=games[currentGame],el=drawNumbers
+  el.innerHTML='';drawn=[]
+  for(let i=1;i<=g.max;i++){
+    const b=document.createElement('div')
+    b.innerText=i
+    b.className='w-11 h-11 flex items-center justify-center rounded-full bg-white border font-bold cursor-pointer'
+    b.onclick=()=>toggleDraw(i,b)
+    el.appendChild(b)
+  }
+  updateDrawBox()
+}
 
-function startDraw(){screenBets.classList.add('hidden');screenDraw.classList.remove('hidden')}
+function toggleDraw(n,el){
+  const g=games[currentGame]
+  if(drawn.includes(n)){
+    drawn=drawn.filter(x=>x!==n)
+    el.className='w-11 h-11 flex items-center justify-center rounded-full bg-white border font-bold cursor-pointer'
+  } else if(drawn.length<g.draw){
+    drawn.push(n)
+    el.className='w-11 h-11 flex items-center justify-center rounded-full bg-emerald-600 text-white font-bold'
+  }
+  updateDrawBox();checkResults()
+}
+
+function updateDrawBox(){
+  drawBox.innerHTML=''
+  drawn.sort((a,b)=>a-b).forEach(n=>{
+    drawBox.innerHTML+=`<span class="px-3 py-1 bg-emerald-600 text-white rounded-lg">${n}</span>`
+  })
+}
+
+function checkResults(){
+  const g=games[currentGame],res=results
+  res.innerHTML=''
+  bets.forEach(b=>{
+    const hits=b.numbers.filter(n=>drawn.includes(n))
+    const win=g.win.includes(hits.length)
+    res.innerHTML+=`
+      <div class="bg-white rounded-2xl p-4 shadow ${win?'border-2 border-emerald-500':''}">
+        <div class="flex justify-between mb-2">
+          <strong>${b.name}</strong>
+          <span class="font-semibold">${hits.length} acertos</span>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          ${b.numbers.map(n=>`
+            <span class="px-3 py-1 rounded-lg text-sm
+              ${drawn.includes(n)?'bg-emerald-600 text-white':'bg-slate-200'}">
+              ${n}
+            </span>`).join('')}
+        </div>
+      </div>`
+  })
+}
+
 function resetDraw(){drawn=[];startDraw()}
+
 function finalizeContest(){
   history.push({game:games[currentGame].name,contest:contestId,bets,drawn})
   localStorage.setItem('caixa_history_full',JSON.stringify(history))
   toast('Concurso salvo')
   goHome()
 }
+
 function openHistory(){
   screenSelect.classList.add('hidden')
   screenHistory.classList.remove('hidden')
-  historyList.innerHTML=history.length?'':
-    '<p class="text-slate-500">Nenhum concurso salvo.</p>'
+  historyList.innerHTML=history.length?'':'<p class="text-slate-500">Nenhum concurso salvo.</p>'
   history.forEach(h=>{
     historyList.innerHTML+=`
-      <div class="bg-white rounded-2xl p-4 shadow">
+      <div class="bg-white rounded-xl p-4 shadow">
         <strong>${h.game} - Concurso ${h.contest}</strong>
         <p class="text-sm mt-1">${h.drawn.join(', ')}</p>
       </div>`
   })
 }
+
 function goHome(){
   screenSelect.classList.remove('hidden')
   screenBets.classList.add('hidden')
